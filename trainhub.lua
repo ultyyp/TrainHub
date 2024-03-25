@@ -1,4 +1,4 @@
-if game.PlaceId == 13655735489 then
+if game.PlaceId == 13655735489 or game.PlaceId == 12214593747 then
 
   
 	local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
@@ -128,6 +128,9 @@ if game.PlaceId == 13655735489 then
 		end,
 	})
 
+
+	
+
 	--PLAYER-------------
 	
 	local PlayerTab = Window:CreateTab("Player", 4483362458) -- Title, Image
@@ -180,9 +183,9 @@ if game.PlaceId == 13655735489 then
 			CurrentValue = 16,
 			Flag = "WalkspeedSlider",
 			Callback = function(Value)
-			  
-				getgenv().WalkspeedValue = Value
 				
+				getgenv().WalkspeedValue = Value
+
 			end,
 		})
 	
@@ -411,6 +414,13 @@ if game.PlaceId == 13655735489 then
 			Rayfield:Destroy()
 		end,
 	})
+
+
+	--AUTOLOAD------------
+
+	queueonteleport([[
+		loadstring(game:HttpGet('https://raw.githubusercontent.com/ultyyp/TrainHub/main/trainhub.lua'))()
+	]]);
 	
 	
 	else 
