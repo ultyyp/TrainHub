@@ -5,6 +5,7 @@ until game:IsLoaded()
 if game.PlaceId == 13655735489 -- Main SBL:Reborn
 or game.PlaceId == 13855957228 -- E Rank
 or game.PlaceId == 14106406838 -- C Rank
+or game.PlaceId == 13660868280 -- C Rank Var 2
 or game.PlaceId == 14281050195 -- B Rank
 then
 
@@ -13,7 +14,10 @@ then
     end
 
     local function isSBLDungeon()
-        return (game.PlaceId == 13855957228 or game.PlaceId == 14106406838 or game.PlaceId == 14281050195)
+        return (game.PlaceId == 13855957228 or  --E
+		game.PlaceId == 14106406838 or  --C
+		game.PlaceId == 13660868280 or --C 2
+		game.PlaceId == 14281050195) --B
     end
 
     local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
@@ -597,9 +601,6 @@ then
 
 else
 
-    Rayfield:Notify({
-        Title = "Game Unsupported!",
-        Content = "Suggest the game in the discord!"
-    })
+    
 
 end
