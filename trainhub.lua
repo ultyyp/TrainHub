@@ -280,16 +280,16 @@ then
     })
 
     getgenv().KillauraSpeed = 0.005
-    local KillauraSlider = MainTab:CreateSlider({
+    local Slider = MainTab:CreateSlider({
         Name = "Killaura Speed",
         Range = {0, 100},
-        Increment = 1, -- Decrease the increment for smoother slider movement
+        Increment = 1,
         Suffix = "Speed",
-        CurrentValue = 50, -- Set default value to the middle
+        CurrentValue = 50,
         Flag = "KillauraSpeedFlag",
         Callback = function(Value)
-            -- Calculation for wait time based on slider value
-            local waitTime = 0.00000001 + (0.0049999 * (Value / 100))
+            -- Calculate wait time based on slider value
+            local waitTime = 0.00005 + (0.00495 * (1 - (Value / 100)))
             getgenv().KillauraSpeed = waitTime
         end
     })
