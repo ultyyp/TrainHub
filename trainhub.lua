@@ -231,7 +231,7 @@ then
                     }
 
                     game:GetService("ReplicatedStorage").Events.CombatEvent:FireServer(ohTable1)
-                    Wait(0.005)
+                    Wait(0.0005)
                 end
 
             elseif (KillauraMode == "Ranged") then
@@ -262,7 +262,7 @@ then
                             end
                         end
                     end
-                    Wait(0.005)
+                    Wait(0.0005)
                 end
             end
 
