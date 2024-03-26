@@ -5,8 +5,9 @@ until game:IsLoaded()
 if game.PlaceId == 13655735489 -- Main SBL:Reborn
 or game.PlaceId == 13855957228 -- E Rank
 or game.PlaceId == 14106406838 -- C Rank
-or game.PlaceId == 13660868280 -- C Rank Var 2
+or game.PlaceId == 13660868280 -- C Rank 2
 or game.PlaceId == 14281050195 -- B Rank
+or game.PlaceId == 15879523643 -- B Rank 2
 then
 
     local function isMainGame()
@@ -14,10 +15,11 @@ then
     end
 
     local function isSBLDungeon()
-        return (game.PlaceId == 13855957228 or  --E
-		game.PlaceId == 14106406838 or  --C
-		game.PlaceId == 13660868280 or --C 2
-		game.PlaceId == 14281050195) --B
+        return (game.PlaceId == 13855957228 or -- E
+        game.PlaceId == 14106406838 or -- C
+        game.PlaceId == 13660868280 or -- C 2
+        game.PlaceId == 14281050195 or -- B
+        game.PlaceId == 15879523643) -- B 2
     end
 
     local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
@@ -169,7 +171,7 @@ then
             game.Players.LocalPlayer.PlayerStats.PlayerData.Class.Value == "Ice" or
             game.Players.LocalPlayer.PlayerStats.PlayerData.Class.Value == "Earth" or
             game.Players.LocalPlayer.PlayerStats.PlayerData.Class.Value == "Fire" or
-			game.Players.LocalPlayer.PlayerStats.PlayerData.Class.Value == "Mage") then
+            game.Players.LocalPlayer.PlayerStats.PlayerData.Class.Value == "Mage") then
             return "Ranged"
         end
     end
@@ -190,7 +192,7 @@ then
         if (game.Players.LocalPlayer.PlayerStats.PlayerData.Class.Value == "Fire") then
             return "MageAttackFire"
         end
-		if (game.Players.LocalPlayer.PlayerStats.PlayerData.Class.Value == "Mage") then
+        if (game.Players.LocalPlayer.PlayerStats.PlayerData.Class.Value == "Mage") then
             return "MageAttackFire"
         end
 
@@ -206,8 +208,8 @@ then
 
             local KillauraMode = GetKillauraMode()
 
-			print(GetKillauraMode())
-			print(GetRangedWeapon())
+            print(GetKillauraMode())
+            print(GetRangedWeapon())
 
             if (KillauraMode == "Melee") then
 
@@ -221,7 +223,9 @@ then
                         if model:IsA("Model") and model:FindFirstChildOfClass("Humanoid") then
                             local player = game:GetService("Players"):GetPlayerFromCharacter(model)
                             if not player then
-								if(model:FindFirstChild("Indicator")) then model.Indicator:Destroy() end
+                                if (model:FindFirstChild("Indicator")) then
+                                    model.Indicator:Destroy()
+                                end
                                 table.insert(hitbox, model)
                             end
                         end
@@ -235,7 +239,7 @@ then
                     }
 
                     game:GetService("ReplicatedStorage").Events.CombatEvent:FireServer(ohTable1)
-                    Wait(0.0005)
+                    Wait(getgenv().KillauraSpeed)
                 end
 
             elseif (KillauraMode == "Ranged") then
@@ -261,42 +265,63 @@ then
                     for _, child in ipairs(workspace:GetChildren()) do
                         if child:IsA("Model") and child:FindFirstChild("Humanoid") then
                             if not isPlayerCharacter(child) then
-								if(child:FindFirstChild("Indicator")) then child.Indicator:Destroy() end
+                                if (child:FindFirstChild("Indicator")) then
+                                    child.Indicator:Destroy()
+                                end
                                 DamageEvent:FireServer(ohInstance1, {child.Humanoid}, ohString3)
                             end
                         end
                     end
-                    Wait(0.0005)
+                    Wait(getgenv().KillauraSpeed)
                 end
             end
 
         end
     })
 
-    local TeleportsSection = MainTab:CreateSection("Teleports")
-
-    local DungeonDropdown = MainTab:CreateDropdown({
-        Name = "Dungeon Gates",
-        Options = {"Placeholder", "ERank", "DRank", "CRank", "BRank", "ARank", "SRank"},
-        CurrentOption = "Placeholder",
-        Callback = function(Option)
-
-            getgenv().CurrentGateOption = table.unpack(Option)
-
-            local GatesFolder = workspace:FindFirstChild("SpawnGate")
-
-            if (GatesFolder:FindFirstChild(getgenv().CurrentGateOption)) then
-                local gate = GatesFolder:FindFirstChild(getgenv().CurrentGateOption)
-                local player = game.Players.LocalPlayer
-                player.Character:SetPrimaryPartCFrame(CFrame.new(gate.Position))
-            else
-                Rayfield:Notify({
-                    Title = "Dungeon Not Found!",
-                    Content = "Wait for a dungeon of that difficulty to spawn in!"
-                })
-            end
+    getgenv().KillauraSpeed = 0.005
+    local KillauraSlider = MainTab:CreateSlider({
+        Name = "Killaura Speed",
+        Range = {0, 100},
+        Increment = 1, -- Decrease the increment for smoother slider movement
+        Suffix = "Speed",
+        CurrentValue = 50, -- Set default value to the middle
+        Flag = "KillauraSpeedFlag",
+        Callback = function(Value)
+            -- Calculation for wait time based on slider value
+            local waitTime = 0.00000001 + (0.0049999 * (Value / 100))
+            getgenv().KillauraSpeed = waitTime
         end
     })
+
+    if (isMainGame()) then
+
+        local TeleportsSection = MainTab:CreateSection("Teleports")
+
+        local DungeonDropdown = MainTab:CreateDropdown({
+            Name = "Dungeon Gates",
+            Options = {"Placeholder", "ERank", "DRank", "CRank", "BRank", "ARank", "SRank"},
+            CurrentOption = "Placeholder",
+            Callback = function(Option)
+
+                getgenv().CurrentGateOption = table.unpack(Option)
+
+                local GatesFolder = workspace:FindFirstChild("SpawnGate")
+
+                if (GatesFolder:FindFirstChild(getgenv().CurrentGateOption)) then
+                    local gate = GatesFolder:FindFirstChild(getgenv().CurrentGateOption)
+                    local player = game.Players.LocalPlayer
+                    player.Character:SetPrimaryPartCFrame(CFrame.new(gate.Position))
+                else
+                    Rayfield:Notify({
+                        Title = "Dungeon Not Found!",
+                        Content = "Wait for a dungeon of that difficulty to spawn in!"
+                    })
+                end
+            end
+        })
+
+    end
 
     -- PLAYER-------------
 
@@ -600,7 +625,9 @@ then
 	]]);
 
 else
-
-    
-
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Game Unuspported!",
+        Text = "Suggest it in the discord!",
+        Icon = "rbxassetid://4913111798"
+    })
 end
