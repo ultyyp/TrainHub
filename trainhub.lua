@@ -164,7 +164,8 @@ then
             game.Players.LocalPlayer.PlayerStats.PlayerData.Class.Value == "Healer" or
             game.Players.LocalPlayer.PlayerStats.PlayerData.Class.Value == "Ice" or
             game.Players.LocalPlayer.PlayerStats.PlayerData.Class.Value == "Earth" or
-            game.Players.LocalPlayer.PlayerStats.PlayerData.Class.Value == "Fire") then
+            game.Players.LocalPlayer.PlayerStats.PlayerData.Class.Value == "Fire" or
+			game.Players.LocalPlayer.PlayerStats.PlayerData.Class.Value == "Mage") then
             return "Ranged"
         end
     end
@@ -185,6 +186,10 @@ then
         if (game.Players.LocalPlayer.PlayerStats.PlayerData.Class.Value == "Fire") then
             return "MageAttackFire"
         end
+		if (game.Players.LocalPlayer.PlayerStats.PlayerData.Class.Value == "Mage") then
+            return "MageAttackFire"
+        end
+
     end
 
     getgenv().KillauraToggle = false
@@ -196,6 +201,9 @@ then
             getgenv().KillauraToggle = Value
 
             local KillauraMode = GetKillauraMode()
+
+			print(GetKillauraMode())
+			print(GetRangedWeapon())
 
             if (KillauraMode == "Melee") then
 
@@ -209,13 +217,14 @@ then
                         if model:IsA("Model") and model:FindFirstChildOfClass("Humanoid") then
                             local player = game:GetService("Players"):GetPlayerFromCharacter(model)
                             if not player then
+								if(model:FindFirstChild("Indicator")) then model.Indicator:Destroy() end
                                 table.insert(hitbox, model)
                             end
                         end
                     end
 
                     local ohTable1 = {
-                        ["char"] = workspace.LocalPlayer,
+                        ["char"] = game.Players.LocalPlayer.Character,
                         ["sentcombo"] = 2,
                         ["action"] = "hitass",
                         ["hitbox"] = hitbox
@@ -228,7 +237,7 @@ then
             elseif (KillauraMode == "Ranged") then
 
                 -- Ranged Killaura
-                local ohInstance1 = workspace.LocalPlayer
+                local ohInstance1 = game.Players.LocalPlayer.Character
                 local ohString3 = GetRangedWeapon()
                 local ReplicatedStorage = game:GetService("ReplicatedStorage")
                 local DamageEvent = ReplicatedStorage.Events.Damage
@@ -248,6 +257,7 @@ then
                     for _, child in ipairs(workspace:GetChildren()) do
                         if child:IsA("Model") and child:FindFirstChild("Humanoid") then
                             if not isPlayerCharacter(child) then
+								if(child:FindFirstChild("Indicator")) then child.Indicator:Destroy() end
                                 DamageEvent:FireServer(ohInstance1, {child.Humanoid}, ohString3)
                             end
                         end
