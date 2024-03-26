@@ -215,7 +215,7 @@ then
                     end
 
                     local ohTable1 = {
-                        ["char"] = workspace.ult_rxin,
+                        ["char"] = workspace.LocalPlayer,
                         ["sentcombo"] = 2,
                         ["action"] = "hitass",
                         ["hitbox"] = hitbox
@@ -228,7 +228,7 @@ then
             elseif (KillauraMode == "Ranged") then
 
                 -- Ranged Killaura
-                local ohInstance1 = workspace.ult_rxin
+                local ohInstance1 = workspace.LocalPlayer
                 local ohString3 = GetRangedWeapon()
                 local ReplicatedStorage = game:GetService("ReplicatedStorage")
                 local DamageEvent = ReplicatedStorage.Events.Damage
