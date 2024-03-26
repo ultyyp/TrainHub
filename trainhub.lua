@@ -1,5 +1,12 @@
-if game.PlaceId == 13655735489 or game.PlaceId == 12214593747 then
+if game.PlaceId == 13655735489 --Main SBL:Reborn
+or game.PlaceId == 13855957228 --E Rank
+or game.PlaceId == 14106406838 --C Rank
+or game.PlaceId == 14281050195 --B Rank
+then
 
+	local function isSBLDungeon(placeId)
+		return (game.PlaceId == 13855957228 or game.PlaceId == 14106406838 or game.PlaceId == 14281050195)
+	end
   
 	local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 	
@@ -14,19 +21,15 @@ if game.PlaceId == 13655735489 or game.PlaceId == 12214593747 then
 		},
 		KeySystem = false, -- Set this to true to use their key system
 		KeySettings = {
-			Title = "Sirius Hub",
+			Title = "Train Hub",
 			Subtitle = "Key System",
-			Note = "Join the discord (discord.gg/sirius)",
+			Note = "Join the discord (discord.gg/train)",
 			SaveKey = true,
 			Key = "ABCDEF"
 		}
 	})
 	
-	game:GetService("StarterGui"):SetCore("SendNotification",{
-		Title = "Hub Loaded!",
-		Text = "Success!",
-		Icon = "https://www.roblox.com/asset/?id=4485364377"
-	})
+	Rayfield:Notify({Title = "Loading Successful!", Content = "Enjoy!"})
 	
 
 
@@ -36,7 +39,10 @@ if game.PlaceId == 13655735489 or game.PlaceId == 12214593747 then
 	local MainTab = Window:CreateTab("Main", 4483362458)
 	
 	local AutofarmSection = MainTab:CreateSection("Autofarm")
+
 	
+	if game.PlaceId == 13655735489 then --Main SBL
+
 	local QuestFarmToggle = MainTab:CreateToggle({
 		Name = "Autofarm Quest",
 		CurrentValue = false,
@@ -128,6 +134,78 @@ if game.PlaceId == 13655735489 or game.PlaceId == 12214593747 then
 		end,
 	})
 
+end
+
+	if(isSBLDungeon()) then
+
+		getgenv().KillauraToggle = false
+		local Toggle = MainTab:CreateToggle({
+			Name = "Killaura",
+			CurrentValue = false,
+			Flag = "KillauraFlag", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+			Callback = function(Value)
+				getgenv().KillauraToggle = Value
+				local ohInstance1 = workspace.ult_rxin
+
+				local ohString3 = "DamageArrow"
+		
+				local ReplicatedStorage = game:GetService("ReplicatedStorage")
+				local DamageEvent = ReplicatedStorage.Events.Damage
+		
+				-- Function to check if an object is a player's character
+				local function isPlayerCharacter(object)
+				if object:IsA("Model") and object:FindFirstChild("Humanoid") and object:FindFirstChild("Humanoid").Parent == object then
+				local player = game.Players:GetPlayerFromCharacter(object)
+				return player ~= nil
+					end
+					return false
+				end
+				
+			while getgenv().KillauraToggle == true do
+				-- Fire the remote on every humanoid in workspace except players
+				for _, child in ipairs(workspace:GetChildren()) do
+					if child:IsA("Model") and child:FindFirstChild("Humanoid") then
+						if not isPlayerCharacter(child) then
+						DamageEvent:FireServer(ohInstance1, {child.Humanoid}, ohString3)
+						end
+					end
+				end
+				Wait(0.005)
+			end
+
+			end,
+		})
+
+		
+
+
+	end
+
+
+
+
+	local TeleportsSection = MainTab:CreateSection("Teleports")
+
+	local DungeonDropdown = MainTab:CreateDropdown({
+		Name = "Dungeon Gates",
+		Options = {"Placeholder", "ERank", "DRank", "CRank", "BRank", "ARank", "SRank"},
+		CurrentOption = "Placeholder",
+		Callback = function(Option)
+
+			getgenv().CurrentGateOption = table.unpack(Option)
+
+			local GatesFolder = workspace:FindFirstChild("SpawnGate")
+			
+			if(GatesFolder:FindFirstChild(getgenv().CurrentGateOption)) then
+				local gate = GatesFolder:FindFirstChild(getgenv().CurrentGateOption )
+				local player = game.Players.LocalPlayer
+				player.Character:SetPrimaryPartCFrame(CFrame.new(gate.Position))
+			else
+				Rayfield:Notify({Title = "Dungeon Not Found!", Content = "Wait for a dungeon of that difficulty to spawn in!"})
+			end
+		end,
+	})
+
 
 	
 
@@ -194,7 +272,7 @@ if game.PlaceId == 13655735489 or game.PlaceId == 12214593747 then
 
 	local VisualTab = Window:CreateTab("Visual", 4483362458) -- Title, Image
 	
-	local EspSection = VisualTab:CreateSection("ESP")
+	local EspSection = VisualTab:CreateSection("Esp")
 	
 	getgenv().Esp = false  
 	local PlayerEspToggle = VisualTab:CreateToggle({
@@ -425,10 +503,6 @@ if game.PlaceId == 13655735489 or game.PlaceId == 12214593747 then
 	
 	else 
 	  
-	game:GetService("StarterGui"):SetCore("SendNotification",{
-		Title = "Game Unsupported!", -- Required
-		Text = "Suggest it in the discord!", -- Required
-		Icon = "https://www.roblox.com/asset/?id=2761831324"
-	})
+	Rayfield:Notify({Title = "Game Unsupported!", Content = "Suggest the game in the discord!"})
 	
 	end
